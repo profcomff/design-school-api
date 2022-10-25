@@ -12,7 +12,7 @@ class Year(str, Enum):
     THIRD = "3"
     FOURTH = "4"
     FIFTH = "1м"
-    SIXTH = "2v"
+    SIXTH = "2м"
 
 
 class Directions(str, Enum):

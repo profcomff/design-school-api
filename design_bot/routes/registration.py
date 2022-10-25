@@ -13,3 +13,4 @@ async def sign_up(new_user: UserPost) -> PlainTextResponse:
     db.session.flush()
     return PlainTextResponse(status_code=201, content="User created")
 
+
