@@ -15,11 +15,18 @@ class Year(str, Enum):
     SIXTH = "2v"
 
 
-class RequestType(str, Enum):
+class Directions(str, Enum):
     PHOTO = "photo"
     CONTENT = "content"
     SOCIALWEBDESIGN = "socialwebdesign"
     IDENTICDESIGN = "identicdesign"
+
+
+class RequestTypes(str, Enum):
+    TEXT = "text"
+    VIDEO = "video"
+    FILE = "file"
+
 
 
 class SpamBeforeRegistration(Base):
@@ -53,9 +60,10 @@ class User(Base):
 
 class Video(Base):
     id = Column(Integer, primary_key=True)
+    link = Column(String, nullable=False)
     request = Column(Text, nullable=True)
     direction_id = Column(Integer, ForeignKey("direction.id"))
-    request_type = Column(DbEnum(Year, native_enum=False), nullable=True)
+    request_type = Column(DbEnum(..., native_enum=False), nullable=True)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="videos")
 
