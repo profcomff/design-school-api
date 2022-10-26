@@ -63,7 +63,7 @@ class User(Base):
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")
     responses: list[Response] = relationship("Response", foreign_keys="Response.user_id")
 
-    @property
+    @hybrid_property
     async def last_response(self) -> Response:
         return sorted(self.responses, key=lambda response: response.video_id)[-1]
 
