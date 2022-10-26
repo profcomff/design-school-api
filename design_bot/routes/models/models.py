@@ -14,11 +14,23 @@ class UserPost(BaseModel):
     link: HttpUrl
 
 
+class UserGet(UserPost):
+    id: int
+
+
+class SpamPost(BaseModel):
+    user_link: HttpUrl
+
+
 class VideoPost(BaseModel):
     link: HttpUrl
     request: str | None
     direction_id: int
     request_type: RequestTypes
+
+
+class VideoGet(VideoPost):
+    id: int
 
 
 class ResponsePost(BaseModel):
@@ -27,8 +39,16 @@ class ResponsePost(BaseModel):
     user_id: int
 
 
+class ResponseGet(ResponsePost):
+    id: int
+
+
 class DirectionPost(BaseModel):
     link: HttpUrl
     name: Directions
+
+
+class DirectionGet(DirectionPost):
+    id: int
 
 

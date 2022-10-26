@@ -28,7 +28,6 @@ class RequestTypes(str, Enum):
     FILE = "file"
 
 
-
 class SpamBeforeRegistration(Base):
     id = Column(Integer, primary_key=True)
     user_link = Column(String, nullable=False)
@@ -41,7 +40,6 @@ class Direction(Base):
 
     users: list[User] = relationship("User", foreign_keys="User.direction_id")
     videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id")
-
 
 
 class User(Base):
