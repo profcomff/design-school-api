@@ -63,12 +63,16 @@ class User(Base):
 
 class Video(Base):
     id = Column(Integer, primary_key=True)
+    next_video_id = Column(Integer, ForeignKey("video.id"))
     link = Column(String, nullable=False)
     request = Column(Text, nullable=True)
     direction_id = Column(Integer, ForeignKey("direction.id"))
     request_type = Column(DbEnum(..., native_enum=False), nullable=True)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="videos")
+
+    prev_video: list[Video]
+    next_video: Video = relationship("Video", foreign_keys=[next_video_id], backref="prev_video", remote_side=id)
 
 
 class Response(Base):

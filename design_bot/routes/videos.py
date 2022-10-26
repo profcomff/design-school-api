@@ -44,3 +44,14 @@ async def delete_video(id: int) -> None:
 async def get_all_videos() -> list[VideoGet]:
     return parse_obj_as(list[VideoGet], db.session.query(Video).all())
 
+
+@videos.get("/{user_id}", response_model=VideoGet | None)
+async def get_next_video(user_id: int) -> VideoGet | PlainTextResponse:
+    user: User = db.session.query(User).get(user_id)
+    if not user:
+        raise ObjectNotFound(User, user_id)
+    last_video = (await user.last_response).video
+    if next_video := last_video.next_video:
+        return VideoGet.from_orm(next_video)
+    else:
+        return PlainTextResponse(status_code=200, content="Course ended")
