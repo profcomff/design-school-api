@@ -15,7 +15,7 @@ async def add_user_to_spam(spam_post: SpamPost) -> PlainTextResponse:
 
 
 @registration.post("/", response_model=UserGet)
-async def sign_up(new_user: UserPost) -> PlainTextResponse:
+async def sign_up(new_user: UserPost) -> UserGet:
     db.session.add(user := User(**new_user.dict()))
     db.session.flush()
     return UserGet.from_orm(user)
