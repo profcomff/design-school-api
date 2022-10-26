@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from .base import Base
 from sqlalchemy import Column, Integer, String, Text, ForeignKey
 from sqlalchemy import Enum as DbEnum
@@ -39,7 +42,11 @@ class Direction(Base):
     name = Column(String, nullable=False)
 
     users: list[User] = relationship("User", foreign_keys="User.direction_id")
-    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id")
+    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id", order_by="Direction.id")
+
+    @hybrid_property
+    def last_video(self):
+        return self.videos[-1]
 
 
 class User(Base):

@@ -1,18 +1,21 @@
 from fastapi import APIRouter
+from fastapi_sqlalchemy import db
 from pydantic import parse_obj_as
 from starlette.responses import PlainTextResponse
-from .models.models import UserPost, SpamPost, VideoPost, VideoGet
-from fastapi_sqlalchemy import db
-from design_bot.models.db import User, SpamBeforeRegistration, Video
-from design_bot.exceptions import ObjectNotFound
 
+from design_bot.exceptions import ObjectNotFound
+from design_bot.models.db import User, Video, Direction
+from .models.models import VideoPost, VideoGet
 
 videos = APIRouter(prefix="/video", tags=["Video"])
 
 
 @videos.post("/", response_model=VideoGet)
 async def add_video(video_inp: VideoPost) -> VideoPost:
-    db.session.add(video := Video(**video_inp.dict()))
+    direction: Direction = db.session.query(Direction).get(video_inp.direction_id)
+    if not direction:
+        raise ObjectNotFound(Direction, video_inp.direction_id)
+    db.session.add(video := Video(**video_inp.dict(), next_video=direction.last_video.id))
     db.session.flush()
     return VideoGet.from_orm(video)
 
