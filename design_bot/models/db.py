@@ -78,7 +78,7 @@ class Video(Base):
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="videos")
 
-    prev_video: list[Video]
+    prev_video: Video
     next_video: Video = relationship("Video", foreign_keys=[next_video_id], backref="prev_video", remote_side=id)
 
 
