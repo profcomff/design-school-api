@@ -67,7 +67,7 @@ class Video(Base):
     link = Column(String, nullable=False)
     request = Column(Text, nullable=True)
     direction_id = Column(Integer, ForeignKey("direction.id"))
-    request_type = Column(DbEnum(..., native_enum=False), nullable=True)
+    request_type = Column(DbEnum(RequestTypes, native_enum=False), nullable=True)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="videos")
 

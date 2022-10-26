@@ -4,6 +4,9 @@ from ..settings import Settings
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi_sqlalchemy import DBSessionMiddleware
 
+from .videos import videos
+from .registration import registration
+
 settings = Settings()
 app = FastAPI()
 
@@ -20,3 +23,6 @@ app.add_middleware(
     allow_methods=settings.CORS_ALLOW_METHODS,
     allow_headers=settings.CORS_ALLOW_HEADERS,
 )
+
+app.include_router(videos)
+app.include_router(registration)

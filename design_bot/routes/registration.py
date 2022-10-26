@@ -4,10 +4,10 @@ from .models.models import UserPost, SpamPost, UserGet
 from fastapi_sqlalchemy import db
 from design_bot.models.db import User, SpamBeforeRegistration
 
-registration = APIRouter(prefix="/sign-up", tags=["registration"])
+registration = APIRouter(prefix="/sign-up", tags=["Registration"])
 
 
-@registration.post("/spam", response_model=PlainTextResponse)
+@registration.post("/spam", response_model=None)
 async def add_user_to_spam(spam_post: SpamPost) -> PlainTextResponse:
     db.session.add(SpamBeforeRegistration(**spam_post.dict()))
     db.session.flush()

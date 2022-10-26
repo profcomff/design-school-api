@@ -17,9 +17,9 @@ async def add_video(video_inp: VideoPost) -> VideoPost:
     return VideoGet.from_orm(video)
 
 
-@videos.patch("/", response_model=VideoGet)
-async def patch_video(video_inp: ...) -> VideoGet:
-    ...
+# @videos.patch("/", response_model=VideoGet)
+# async def patch_video(video_inp: ...) -> VideoGet:
+#     ...
 
 
 @videos.get("/{id}", response_model=VideoGet)
