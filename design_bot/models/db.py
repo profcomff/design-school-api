@@ -19,10 +19,10 @@ class Year(str, Enum):
 
 
 class Directions(str, Enum):
-    PHOTO = "photo"
-    CONTENT = "content"
-    SOCIALWEBDESIGN = "socialwebdesign"
-    IDENTICDESIGN = "identicdesign"
+    PHOTO = "PHOTO"
+    CONTENT = "CONTENT"
+    SOCIALWEBDESIGN = "SOCIALWEBDESIGN"
+    IDENTICDESIGN = "IDENTICDESIGN"
 
 
 class RequestTypes(str, Enum):
