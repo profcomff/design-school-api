@@ -17,7 +17,7 @@ callback = BotCallback(url="http://example.com/whateveryouwant", title="my serve
 bot = Bot(token=TOKEN, callback=callback)
 
 
-@bot.on.message(text="привет")
+@bot.on.message()
 async def hi_handler(message: Message):
     await message.answer(message.json())
 
