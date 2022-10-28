@@ -46,9 +46,3 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
         # Running the process in the background, because the logic can be complicated
         background_task.add_task(bot.process_event, data)
     return Response("ok")
-
-
-@bot_router.post("/confirm")
-def confirm_access(access: AccessModel) -> PlainTextResponse:
-    if access.group_id == 213296541:
-        return PlainTextResponse('7c0b2c0d')
