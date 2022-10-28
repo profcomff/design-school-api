@@ -5,6 +5,9 @@ from vkbottle.callback import BotCallback
 from fastapi import BackgroundTasks, APIRouter, Request, Response
 from fastapi.responses import PlainTextResponse
 from .models.confrm_access import AccessModel
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 
 bot_router = APIRouter()
@@ -20,7 +23,9 @@ bot = Bot(token=TOKEN, callback=callback)
 @bot.on.message(text="П")
 async def hi_handler(message: Message):
     users_info = await bot.api.users.get(message.from_id)
-    return await message.answer(f"Hello, {users_info[0].first_name}")
+    logger.info(f"{users_info}")
+    ans=  await message.answer(f"Hello, {users_info[0].first_name}")
+    logger.info(f"{ans}")
 
 
 @bot_router.on_event("startup")

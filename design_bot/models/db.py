@@ -61,7 +61,7 @@ class User(Base):
     link = Column(String, nullable=False)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")
-    responses: list[Response] = relationship("Response", foreign_keys="Response.user_id")
+    responses: list[Response] = relationship("Response", foreign_keys="Response.user_id", back_populates="user")
 
     @hybrid_property
     async def last_response(self) -> Response:
@@ -96,4 +96,4 @@ class Response(Base):
     user_id = Column(Integer, ForeignKey("user.id"))
 
     video: Video = relationship("Video", foreign_keys=[video_id])
-    user: User = relationship("User", foreign_keys=[user_id])
+    user: User = relationship("User", foreign_keys=[user_id], back_populates="responses")
