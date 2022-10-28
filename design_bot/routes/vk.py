@@ -13,7 +13,7 @@ bot_router = APIRouter()
 confirmation_code: str
 secret_key: str
 TOKEN = get_settings().TOKEN
-callback = BotCallback(url="http://example.com/whateveryouwant", title="my server")
+callback = BotCallback(url="https://design.bot.test.profcomff.com/", title="my server")
 bot = Bot(token=TOKEN, callback=callback)
 
 
