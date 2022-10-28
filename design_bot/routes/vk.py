@@ -19,7 +19,7 @@ bot = Bot(token=TOKEN, callback=callback)
 
 @bot.on.message(text="П")
 async def hi_handler(message: Message):
-    await message.answer(message.json())
+    await message.answer(str(message.json()))
 
 
 @bot_router.on_event("startup")
