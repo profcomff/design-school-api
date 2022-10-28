@@ -5,7 +5,7 @@ from functools import lru_cache
 class Settings(BaseSettings):
     """Application settings"""
     DB_DSN: PostgresDsn
-
+    TOKEN: str | None
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ['*']
