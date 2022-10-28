@@ -67,6 +67,13 @@ class User(Base):
     async def last_response(self) -> Response:
         return sorted(self.responses, key=lambda response: response.video_id)[-1]
 
+    @hybrid_property
+    async def next_user_video(self) -> Video:
+        last_response = await self.last_response
+        if last_response:
+            return last_response.video.next_video
+        return self.direction.videos[0]
+
 
 class Video(Base):
     id = Column(Integer, primary_key=True)

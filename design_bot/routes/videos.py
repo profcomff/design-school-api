@@ -15,7 +15,9 @@ async def add_video(video_inp: VideoPost) -> VideoPost:
     direction: Direction = db.session.query(Direction).get(video_inp.direction_id)
     if not direction:
         raise ObjectNotFound(Direction, video_inp.direction_id)
-    db.session.add(video := Video(**video_inp.dict(), next_video=direction.last_video.id))
+    db.session.add(video := Video(**video_inp.dict()))
+    db.session.flush()
+    direction.last_video.next_video_id = video.id
     db.session.flush()
     return VideoGet.from_orm(video)
 
@@ -35,9 +37,10 @@ async def get_video(id: int) -> VideoGet:
 
 @videos.delete("/{id}", response_model=None)
 async def delete_video(id: int) -> None:
-    video = db.session.query(Video).get(id)
+    video: Video = db.session.query(Video).get(id)
     if not video:
         raise ObjectNotFound(Video, id)
+    video.prev_video.next_video_id = video.next_video_id
     db.session.delete(video)
     db.session.flush()
     return None
@@ -53,8 +56,5 @@ async def get_next_video(user_id: int) -> VideoGet | PlainTextResponse:
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)
-    last_video = (await user.last_response).video
-    if next_video := last_video.next_video:
-        return VideoGet.from_orm(next_video)
-    else:
-        return PlainTextResponse(status_code=200, content="Course ended")
+    return VideoGet.from_orm(video) if (video := user.next_user_video)\
+        else PlainTextResponse(status_code=200, content="Course ended")
