@@ -29,7 +29,7 @@ async def startup_event():
     confirmation_code, secret_key = await bot.setup_webhook()
 
 
-@bot_router.post("/whateveryouwant")
+@bot_router.post("/")
 async def vk_handler(req: Request, background_task: BackgroundTasks):
     global confirmation_code, secret_key
 
@@ -48,7 +48,7 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
     return Response("ok")
 
 
-@bot_router.post("/")
+@bot_router.post("/confirm")
 def confirm_access(access: AccessModel) -> PlainTextResponse:
     if access.group_id == 213296541:
         return PlainTextResponse('7c0b2c0d')
