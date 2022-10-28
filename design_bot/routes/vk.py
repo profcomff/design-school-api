@@ -9,7 +9,6 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
-
 bot_router = APIRouter()
 
 # token from vk for init callback server
@@ -24,7 +23,7 @@ bot = Bot(token=TOKEN, callback=callback)
 async def hi_handler(message: Message):
     users_info = await bot.api.users.get(message.from_id)
     logger.info(f"{users_info}")
-    ans=  await message.answer(f"Hello, {users_info[0].first_name}")
+    ans = await message.answer(f"Hello, {users_info[0].first_name}")
     logger.info(f"{ans}")
 
 
@@ -46,6 +45,7 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
     if data.get("secret") == secret_key:
         # Running the process in the background, because the logic can be complicated
         background_task.add_task(bot.process_event, data)
+        raise BaseException
 
     if data.get("type") == "confirmation":
         if data.get("group_id") == 213296541:
@@ -55,4 +55,3 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
     # If the secrets match, then the message definitely came from our bot
 
     return Response("ok")
-
