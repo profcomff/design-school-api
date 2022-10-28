@@ -3,6 +3,7 @@ from vkbottle import Bot
 from vkbottle.bot import Message
 from vkbottle.callback import BotCallback
 from fastapi import BackgroundTasks, APIRouter, Request, Response
+from fastapi.responses import PlainTextResponse
 from .models.confrm_access import AccessModel
 
 
@@ -47,7 +48,7 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
     return Response("ok")
 
 
-@bot_router.post("/", response_model=str)
-def confirm_access(access: AccessModel) -> str:
+@bot_router.post("/")
+def confirm_access(access: AccessModel) -> PlainTextResponse:
     if access.group_id == 213296541:
-        return '7c0b2c0d'
+        return PlainTextResponse('7c0b2c0d')
