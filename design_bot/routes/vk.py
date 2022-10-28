@@ -38,12 +38,12 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
     except Exception:
         return Response("not today", status_code=403)
 
-    if data["secret"] == secret_key:
+    if data.get("secret") == secret_key:
         # Running the process in the background, because the logic can be complicated
         background_task.add_task(bot.process_event, data)
 
-    if data["type"] == "confirmation":
-        if data['group_id'] == 213296541:
+    if data.get("type") == "confirmation":
+        if data.get("group_id") == 213296541:
             return PlainTextResponse('7c0b2c0d')
         return Response(confirmation_code)
 
