@@ -1,11 +1,8 @@
 from fastapi import APIRouter
 from fastapi_sqlalchemy import db
-from pydantic import parse_obj_as
-from starlette.responses import PlainTextResponse
 
-from design_bot.exceptions import ObjectNotFound
-from design_bot.models.db import User, Video, Direction
-from .models.models import VideoPost, VideoGet, DirectionPost, DirectionGet
+from design_bot.models.db import Direction
+from .models.models import DirectionPost, DirectionGet
 
 directions = APIRouter(prefix="/directions", tags=["Directions"])
 
