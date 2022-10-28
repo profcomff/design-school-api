@@ -17,7 +17,7 @@ callback = BotCallback(url="https://design.bot.test.profcomff.com/", title="my s
 bot = Bot(token=TOKEN, callback=callback)
 
 
-@bot.on.message
+@bot.on.message(text="П")
 async def hi_handler(message: Message):
     await message.answer(message.json())
 
