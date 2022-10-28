@@ -1,9 +1,9 @@
-from .base import BaseModel
+from .base import Base
 from design_bot.models.db import Year, RequestTypes, Directions
 from pydantic import HttpUrl
 
 
-class UserPost(BaseModel):
+class UserPost(Base):
     union_id: int
     direction_id: int
     first_name: str
@@ -18,11 +18,11 @@ class UserGet(UserPost):
     id: int
 
 
-class SpamPost(BaseModel):
+class SpamPost(Base):
     user_link: HttpUrl
 
 
-class VideoPost(BaseModel):
+class VideoPost(Base):
     link: HttpUrl
     request: str | None
     direction_id: int
@@ -33,7 +33,7 @@ class VideoGet(VideoPost):
     id: int
 
 
-class ResponsePost(BaseModel):
+class ResponsePost(Base):
     content: str | None
     video_id: int
     user_id: int
@@ -43,7 +43,7 @@ class ResponseGet(ResponsePost):
     id: int
 
 
-class DirectionPost(BaseModel):
+class DirectionPost(Base):
     link: HttpUrl
     name: Directions
 
