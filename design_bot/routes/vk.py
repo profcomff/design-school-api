@@ -38,8 +38,6 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
         return Response("not today", status_code=403)
 
     if data["type"] == "confirmation":
-        if data["group_id"] == 213296541:
-            return PlainTextResponse('7c0b2c0d')
         return Response(confirmation_code)
 
     # If the secrets match, then the message definitely came from our bot
