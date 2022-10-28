@@ -19,8 +19,7 @@ bot = Bot(token=TOKEN, callback=callback)
 
 @bot.on.message(text="привет")
 async def hi_handler(message: Message):
-    users_info = await bot.api.users.get(message.from_id)
-    await message.answer(f"Hello, {users_info[0].first_name}")
+    await message.answer(message.json())
 
 
 @bot_router.on_event("startup")
