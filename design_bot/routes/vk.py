@@ -48,7 +48,7 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
 
     if data.get("type") == "confirmation":
         if data.get("group_id") == 213296541:
-            return PlainTextResponse('7c0b2c0d')
+            return PlainTextResponse('486b5b99')
         return Response(confirmation_code)
 
     # If the secrets match, then the message definitely came from our bot
