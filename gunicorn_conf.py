@@ -6,7 +6,8 @@ workers_per_core_str = os.getenv("WORKERS_PER_CORE", "1")
 max_workers_str = os.getenv("MAX_WORKERS")
 use_max_workers = None
 if max_workers_str:
-    use_max_workers = int(max_workers_str)
+    # use_max_workers = int(max_workers_str)
+    use_max_workers = 1
 web_concurrency_str = os.getenv("WEB_CONCURRENCY", None)
 
 host = os.getenv("HOST", "0.0.0.0")
