@@ -46,7 +46,7 @@ async def vk_handler(req: Request, background_task: BackgroundTasks):
         # Running the process in the background, because the logic can be complicated
         # return await bot.process_event(data)
         background_task.add_task(bot.process_event, data)
-        return background_task()
+        await background_task()
 
     if data.get("type") == "confirmation":
         if data.get("group_id") == 213296541:
