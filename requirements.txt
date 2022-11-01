@@ -6,4 +6,3 @@ uvicorn
 alembic
 SQLAlchemy
 gunicorn
-vkbottle

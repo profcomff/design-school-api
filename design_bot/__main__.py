@@ -1,7 +1,6 @@
 import logging
 
 from design_bot.routes.base import app
-from design_bot.routes.vk import bot
 import uvicorn
 
 logging.basicConfig(
