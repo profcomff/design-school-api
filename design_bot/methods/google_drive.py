@@ -18,10 +18,10 @@ async def create_user_folder(*, first_name: str, middle_name: str, last_name: st
     pass
 
 
-async def upload_text(user_folder_id: str, text: str) -> str:
+async def upload_text_to_drive(user_folder_id: str, text: str) -> str:
     pass
 
 
-async def upload_file(user_folder_id: str, file_path: str) -> str:
+async def upload_file_to_drive(user_folder_id: str, file_path: str) -> str:
     pass
 

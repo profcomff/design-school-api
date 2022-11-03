@@ -1,4 +1,4 @@
-from pydantic import BaseSettings, PostgresDsn, FilePath
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath, FilePath
 from functools import lru_cache
 
 
@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     TOKEN: str | None
     GOOGLE_JSON_PATH: FilePath
     PARENT_FOLDER_ID: str
+    FILE_PATH: DirectoryPath
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ['*']
