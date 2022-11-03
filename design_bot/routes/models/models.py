@@ -3,6 +3,7 @@ from design_bot.models.db import Year, RequestTypes, Directions
 from pydantic import HttpUrl
 
 
+
 class UserPost(Base):
     union_id: str
     direction_id: int
@@ -39,8 +40,6 @@ class VideoGet(VideoPost):
 
 class ResponsePost(Base):
     content: str | None
-    video_id: int
-    user_id: int
 
 
 class ResponseGet(ResponsePost):
