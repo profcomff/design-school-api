@@ -78,9 +78,10 @@ async def upload_text(user_id: int, response_inp: ResponsePost) -> ResponseGet:
     if next_video:
         if next_video.id != response_inp.video_id:
             raise HTTPException(403, "Forbidden")
-    link = await upload_text_to_drive(**response_inp.dict(), social_web_id=user.social_web_id,
+    link = await upload_text_to_drive(first_name=user.first_name, middle_name=user.middle_name,
+                                      last_name=user.last_name, social_web_id=user.social_web_id,
                                       user_folder_id=user.folder_id,
-                                      lesson_number=next_video.id)
+                                      lesson_number=next_video.id, content=response_inp.content)
     db.session.add(response := Response(user_id=user.id, video_id=response_inp.video_id, content=link))
     db.session.flush()
     return ResponseGet.from_orm(response)

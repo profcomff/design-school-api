@@ -31,10 +31,11 @@ async def upload_text_to_drive(*, first_name: str, middle_name: str, last_name: 
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     file = drive.CreateFile({
         'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',
-        "parents": [user_folder_id]})
+        "parents": [{"id": user_folder_id}]})
     file.SetContentString(content)
     file.Upload()
-    return file["webViewLink"]
+    file.GetPermissions()
+    return file["alternateLink"]
 
 
 async def upload_file_to_drive(*, first_name: str, middle_name: str, last_name: str, social_web_id: str,
@@ -42,7 +43,8 @@ async def upload_file_to_drive(*, first_name: str, middle_name: str, last_name: 
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     file = drive.CreateFile({
         'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',
-        "parents": [user_folder_id]})
+        "parents": [{"id": user_folder_id}]})
     file.SetContentFile(file_path)
     file.Upload()
-    return file["webViewLink"]
+    file.GetPermissions()
+    return file["alternateLink"]

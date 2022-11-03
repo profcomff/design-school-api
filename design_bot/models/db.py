@@ -42,7 +42,8 @@ class Direction(Base):
     name = Column(String, nullable=False)
 
     users: list[User] = relationship("User", foreign_keys="User.direction_id")
-    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id",  back_populates="direction", order_by=lambda: Video.id)
+    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id", back_populates="direction",
+                                       order_by=lambda: Video.id)
 
     @hybrid_property
     def last_video(self):
@@ -62,7 +63,8 @@ class User(Base):
     folder_id = Column(String, nullable=False)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")
-    responses: list[Response] = relationship("Response", foreign_keys="Response.user_id", back_populates="user", order_by=lambda: Response.id)
+    responses: list[Response] = relationship("Response", foreign_keys="Response.user_id", back_populates="user",
+                                             order_by=lambda: Response.id)
 
     @hybrid_property
     async def last_response(self) -> Response:
@@ -73,8 +75,8 @@ class User(Base):
         last_response = await self.last_response
         if last_response:
             return last_response.video.next_video
-        return self.direction.videos[0]
-
+        return videos[0] if (videos := self.direction.videos) else None
+    
 
 class Video(Base):
     id = Column(Integer, primary_key=True)
