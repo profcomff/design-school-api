@@ -17,7 +17,6 @@ from design_bot.methods.google_drive import upload_file_to_drive, upload_text_to
 
 settings = get_settings()
 
-
 response = APIRouter(prefix="/response/{user_id}", tags=["Response"])
 
 
@@ -34,7 +33,8 @@ async def upload_file(user_id: int, response_inp: ResponsePost, file: UploadFile
             raise HTTPException(403, "Forbidden")
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     ext = file.filename.split('.')[-1]
-    path = os.path.join(settings.FILE_PATH, f"{user.first_name}_{user.middle_name}_{user.last_name}_video_{next_video.id}_{random_string}.{ext}")
+    path = os.path.join(settings.FILE_PATH,
+                        f"{user.first_name}_{user.middle_name}_{user.last_name}_video_{next_video.id}_{random_string}.{ext}")
     async with aiofiles.open(path, 'wb') as out_file:
         content = await file.read()
         await out_file.write(content)
@@ -57,7 +57,9 @@ async def upload_link(user_id: int, response_inp: ResponsePost) -> ResponseGet:
     if next_video:
         if next_video.id != response_inp.video_id:
             raise HTTPException(403, "Forbidden")
-    link = await upload_text_to_drive(user.folder_id, response_inp.content)
+    link = await upload_text_to_drive(**response_inp.dict(), social_web_id=user.social_web_id,
+                                      user_folder_id=user.folder_id,
+                                      lesson_number=next_video.id)
     db.session.add(response := Response(user_id=user.id, video_id=response_inp.video_id, content=link))
     db.session.flush()
     return ResponseGet.from_orm(response)
@@ -74,7 +76,9 @@ async def upload_text(user_id: int, response_inp: ResponsePost) -> ResponseGet:
     if next_video:
         if next_video.id != response_inp.video_id:
             raise HTTPException(403, "Forbidden")
-    link = await upload_text_to_drive(user.folder_id, response_inp.content)
+    link = await upload_text_to_drive(**response_inp.dict(), social_web_id=user.social_web_id,
+                                      user_folder_id=user.folder_id,
+                                      lesson_number=next_video.id)
     db.session.add(response := Response(user_id=user.id, video_id=response_inp.video_id, content=link))
     db.session.flush()
     return ResponseGet.from_orm(response)

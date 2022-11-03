@@ -22,6 +22,10 @@ class SpamPost(Base):
     user_link: HttpUrl
 
 
+class SpamGet(SpamPost):
+    id: int
+
+
 class VideoPost(Base):
     link: HttpUrl
     request: str | None
