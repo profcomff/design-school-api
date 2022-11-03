@@ -58,7 +58,8 @@ class User(Base):
     last_name = Column(String, nullable=False)
     year = Column(DbEnum(Year, native_enum=False), nullable=False)
     readme = Column(Text, nullable=True)
-    link = Column(String, nullable=False)
+    social_web_id = Column(String, nullable=False)
+    folder_id = Column(String, nullable=False)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")
     responses: list[Response] = relationship("Response", foreign_keys="Response.user_id", back_populates="user", order_by=lambda: Response.id)
