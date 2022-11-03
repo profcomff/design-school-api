@@ -15,10 +15,12 @@ async def add_video(video_inp: VideoPost) -> VideoPost:
     direction: Direction = db.session.query(Direction).get(video_inp.direction_id)
     if not direction:
         raise ObjectNotFound(Direction, video_inp.direction_id)
+    last_video = direction.last_video
     db.session.add(video := Video(**video_inp.dict()))
     db.session.flush()
-    direction.last_video.next_video_id = video.id
-    db.session.flush()
+    if last_video:
+        last_video.next_video_id = video.id
+        db.session.flush()
     return VideoGet.from_orm(video)
 
 

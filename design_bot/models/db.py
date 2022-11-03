@@ -42,11 +42,11 @@ class Direction(Base):
     name = Column(String, nullable=False)
 
     users: list[User] = relationship("User", foreign_keys="User.direction_id")
-    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id", order_by="Direction.id")
+    videos: list[Video] = relationship("Video", foreign_keys="Video.direction_id",  back_populates="direction", order_by=lambda: Video.id)
 
     @hybrid_property
     def last_video(self):
-        return self.videos[-1]
+        return self.videos[-1] if len(self.videos) else None
 
 
 class User(Base):
