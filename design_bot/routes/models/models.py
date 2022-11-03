@@ -4,7 +4,7 @@ from pydantic import HttpUrl
 
 
 class UserPost(Base):
-    union_id: int
+    union_id: str
     direction_id: int
     first_name: str
     middle_name: str
@@ -19,7 +19,7 @@ class UserGet(UserPost):
 
 
 class SpamPost(Base):
-    social_web_id: HttpUrl
+    social_web_id: str
 
 
 class SpamGet(SpamPost):

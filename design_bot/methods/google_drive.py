@@ -17,7 +17,7 @@ gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(settings.GO
 drive = GoogleDrive(gauth)
 
 
-async def create_user_folder(*, first_name: str, middle_name: str, last_name: str, social_web_id: int) -> str:
+async def create_user_folder(*, first_name: str, middle_name: str, last_name: str, social_web_id: int, **kwargs) -> str:
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     newFolder = drive.CreateFile({'title': f"{first_name}_{middle_name}_{last_name}_{social_web_id}_{random_string}",
                                   "parents": [{"kind": "drive#fileLink", "id": \
@@ -27,7 +27,7 @@ async def create_user_folder(*, first_name: str, middle_name: str, last_name: st
 
 
 async def upload_text_to_drive(*, first_name: str, middle_name: str, last_name: str, social_web_id: str,
-                               user_folder_id: str, content: str, lesson_number: int) -> str:
+                               user_folder_id: str, content: str, lesson_number: int, **kwargs) -> str:
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     file = drive.CreateFile({
         'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',
@@ -38,7 +38,7 @@ async def upload_text_to_drive(*, first_name: str, middle_name: str, last_name: 
 
 
 async def upload_file_to_drive(*, first_name: str, middle_name: str, last_name: str, social_web_id: str,
-                               user_folder_id: str, file_path: str, lesson_number: int) -> str:
+                               user_folder_id: str, file_path: str, lesson_number: int, **kwargs) -> str:
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     file = drive.CreateFile({
         'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',

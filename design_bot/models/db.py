@@ -51,7 +51,7 @@ class Direction(Base):
 
 class User(Base):
     id = Column(Integer, primary_key=True)
-    union_id = Column(Integer, nullable=False)
+    union_id = Column(String, nullable=False)
     direction_id = Column(Integer, ForeignKey("direction.id"))
     first_name = Column(String, nullable=False)
     middle_name = Column(String, nullable=False)
