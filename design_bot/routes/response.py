@@ -38,8 +38,8 @@ async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...))
         link = await upload_file_to_drive(first_name=user.first_name, middle_name=user.middle_name,
                                           last_name=user.last_name, file_path=path, lesson_number=next_video.id,
                                           user_folder_id=user.folder_id,
-                                          social_web_id=user.social_web_id, )
-        db.session.add(response := Response(content=link, video_id=video_id))
+                                          social_web_id=user.social_web_id)
+        db.session.add(response := Response(content=link, video_id=video_id, user_id=user.id))
         db.session.flush()
         os.remove(path)
     return ResponseGet.from_orm(response)
