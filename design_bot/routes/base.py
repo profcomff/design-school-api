@@ -12,6 +12,7 @@ from .videos import videos
 from .registration import registration
 from .directions import directions
 from .uservideo import user_video
+from .response import response
 
 settings = Settings()
 app = FastAPI()
@@ -45,3 +46,4 @@ app.include_router(directions)
 app.include_router(videos)
 app.include_router(registration)
 app.include_router(user_video)
+app.include_router(response)
