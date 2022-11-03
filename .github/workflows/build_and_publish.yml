@@ -2,7 +2,7 @@ name: Build and publish a Docker image
 
 on:
   push:
-    branches: ['backend-init']
+    branches: ['main']
     tags:
       - 'v*'
 
