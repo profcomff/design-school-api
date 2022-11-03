@@ -11,7 +11,7 @@ class UserPost(Base):
     last_name: str
     year: Year
     readme: str
-    link: HttpUrl
+    social_web_id: str
 
 
 class UserGet(UserPost):

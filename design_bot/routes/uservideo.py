@@ -6,7 +6,7 @@ from pydantic import parse_obj_as
 from starlette.responses import PlainTextResponse
 
 from design_bot.exceptions import ObjectNotFound
-from design_bot.models.db import User, Video, Direction, Response
+from design_bot.models.db import User, Video, Direction, Response, RequestTypes
 from .models.models import VideoPost, VideoGet, ResponsePost, ResponseGet
 
 
@@ -19,8 +19,11 @@ async def get_next_video(user_id: int) -> VideoGet | PlainTextResponse:
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)
-    return VideoGet.from_orm(video) if (video := await user.next_user_video)\
-        else PlainTextResponse(status_code=200, content="Course ended")
+    video = await user.next_user_video
+    if video.request_type == "":
+        db.session.add(Response(video_id=video.id, user_id=user.id))
+        db.session.flush()
+    return VideoGet.from_orm(video) if video else PlainTextResponse(status_code=200, content="Course ended")
 
 
 @user_video.post("/{user_id}", response_model=ResponseGet)
