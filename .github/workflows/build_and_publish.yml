@@ -54,7 +54,7 @@ jobs:
       name: Testing
       url: https://design.bot.test.profcomff.com/
     env:
-      CONTAITER_NAME: com_profcomff_bot_design_test
+      CONTAITER_NAME: com_profcomff_api_design_school_test
     permissions:
       packages: read
 
@@ -78,7 +78,8 @@ jobs:
             --restart on-failure:3 \
             --network=web \
             --env DB_DSN=${{ secrets.DB_DSN }} \
-            --env TOKEN=${{ secrets.TOKEN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
           
@@ -92,7 +93,7 @@ jobs:
       name: Production
       url: https://design.bot.profcomff.com/
     env:
-      CONTAITER_NAME: com_profcomff_bot_design_prod
+      CONTAITER_NAME: com_profcomff_api_design_school
     permissions:
       packages: read
 
@@ -116,6 +117,7 @@ jobs:
             --restart always \
             --network=web \
             --env DB_DSN=${{ secrets.DB_DSN }} \
-            --env TOKEN=${{ secrets.TOKEN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest

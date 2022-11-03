@@ -4,6 +4,7 @@ import string
 from oauth2client.service_account import ServiceAccountCredentials
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
+import json
 
 from design_bot.settings import get_settings
 
@@ -13,7 +14,10 @@ SCOPES = ['https://www.googleapis.com/auth/drive.file', "https://www.googleapis.
 
 gauth = GoogleAuth()
 gauth.auth_method = 'service'
-gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(settings.GOOGLE_JSON_PATH, SCOPES)
+# gauth.credentials = ServiceAccountCredentials.from_json_keyfile_name(settings.GOOGLE_JSON_PATH, SCOPES)
+#
+# ServiceAccountCredentials.from_json(settings.CREDS)
+gauth.credentials=ServiceAccountCredentials.from_json_keyfile_dict(json.loads(settings.CREDS), scopes=SCOPES)
 drive = GoogleDrive(gauth)
 
 
