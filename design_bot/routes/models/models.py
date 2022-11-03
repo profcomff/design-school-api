@@ -19,7 +19,7 @@ class UserGet(UserPost):
 
 
 class SpamPost(Base):
-    user_link: HttpUrl
+    social_web_id: HttpUrl
 
 
 class SpamGet(SpamPost):

@@ -36,11 +36,12 @@ async def upload_file(user_id: int, response_inp: ResponsePost, file: UploadFile
     path = os.path.join(settings.FILE_PATH,
                         f"{user.first_name}_{user.middle_name}_{user.last_name}_video_{next_video.id}_{random_string}.{ext}")
     async with aiofiles.open(path, 'wb') as out_file:
-        content = await file.read()
-        await out_file.write(content)
-    link = await upload_file_to_drive(user.folder_id, path)
-    db.session.add(response := Response(**response_inp.dict(), content=link))
-    db.session.flush()
+        await out_file.write(await file.read())
+        link = await upload_file_to_drive(**response_inp.dict(), user_folder_id=user.folder_id,
+                                          social_web_id=user.social_web_id, )
+        db.session.add(response := Response(**response_inp.dict(), content=link))
+        db.session.flush()
+        os.remove(path)
     return ResponseGet.from_orm(response)
 
 
@@ -57,9 +58,10 @@ async def upload_link(user_id: int, response_inp: ResponsePost) -> ResponseGet:
     if next_video:
         if next_video.id != response_inp.video_id:
             raise HTTPException(403, "Forbidden")
-    link = await upload_text_to_drive(**response_inp.dict(), social_web_id=user.social_web_id,
+    link = await upload_text_to_drive(social_web_id=user.social_web_id,
                                       user_folder_id=user.folder_id,
-                                      lesson_number=next_video.id)
+                                      lesson_number=next_video.id, first_name=user.first_name,
+                                      middle_name=user.middle_name, last_name=user.last_name, )
     db.session.add(response := Response(user_id=user.id, video_id=response_inp.video_id, content=link))
     db.session.flush()
     return ResponseGet.from_orm(response)

@@ -1,10 +1,10 @@
 import random
 import string
 
-import aiofiles
+from oauth2client.service_account import ServiceAccountCredentials
 from pydrive2.auth import GoogleAuth
 from pydrive2.drive import GoogleDrive
-from oauth2client.service_account import ServiceAccountCredentials
+
 from design_bot.settings import get_settings
 
 settings = get_settings()
@@ -31,12 +31,18 @@ async def upload_text_to_drive(*, first_name: str, middle_name: str, last_name: 
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     file = drive.CreateFile({
         'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',
-        "parents": [user_folder_id]})  # Create GoogleDriveFile instance with title 'Hello.txt'.
-    file.SetContentString(content)  # Set content of the file from given string.
+        "parents": [user_folder_id]})
+    file.SetContentString(content)
     file.Upload()
     return file["webViewLink"]
 
 
-async def upload_file_to_drive(user_folder_id: str, file_path: str) -> str:
-    async with aiofiles.open(file_path):
-        pass
+async def upload_file_to_drive(*, first_name: str, middle_name: str, last_name: str, social_web_id: str,
+                               user_folder_id: str, file_path: str, lesson_number: int) -> str:
+    random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
+    file = drive.CreateFile({
+        'title': f'{first_name}_{middle_name}_{last_name}_{social_web_id}_{lesson_number}_{random_string}.txt',
+        "parents": [user_folder_id]})
+    file.SetContentFile(file_path)
+    file.Upload()
+    return file["webViewLink"]

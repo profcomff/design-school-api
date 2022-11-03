@@ -33,7 +33,7 @@ class RequestTypes(str, Enum):
 
 class SpamBeforeRegistration(Base):
     id = Column(Integer, primary_key=True)
-    user_link = Column(String, nullable=False)
+    social_web_id = Column(String, nullable=False)
 
 
 class Direction(Base):
