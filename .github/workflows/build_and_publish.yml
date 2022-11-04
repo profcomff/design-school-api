@@ -1,4 +1,4 @@
-name: Build and publish a Docker image
+name: Build, publish and deploy docker
 
 on:
   push:
@@ -12,6 +12,7 @@ env:
 
 jobs:
   build-and-push-image:
+    name: Build and push
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -59,11 +60,11 @@ jobs:
       packages: read
 
     steps:
-      - name: Run docker container
+      - name: Pull new version
+        run: docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
+
+      - name: Migrate DB
         run: |
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
-          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
-          
           docker run \
             --rm \
             --network=web \
@@ -74,6 +75,10 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test \
             alembic upgrade head
 
+      - name: Run new version
+        id: run_test
+        run: |
+          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
           docker run \
             --detach \
             --restart on-failure:3 \
@@ -83,13 +88,12 @@ jobs:
             --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
-          
 
   deploy-production:
     name: Deploy Production
     needs: build-and-push-image
     if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: [ self-hosted, Linux ]
+    runs-on: [self-hosted, Linux]
     environment:
       name: Production
       url: https://api.design.school.profcomff.com/
@@ -99,11 +103,11 @@ jobs:
       packages: read
 
     steps:
-      - name: Run docker container
+      - name: Pull new version
+        run: docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+      - name: Migrate DB
         run: |
-          docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
-          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
-          
           docker run \
             --rm \
             --network=web \
@@ -114,6 +118,10 @@ jobs:
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
             alembic upgrade head
 
+      - name: Run new version
+        id: run_test
+        run: |
+          docker stop ${{ env.CONTAITER_NAME }} || true && docker rm ${{ env.CONTAITER_NAME }} || true
           docker run \
             --detach \
             --restart always \
