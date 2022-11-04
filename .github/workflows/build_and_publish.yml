@@ -68,9 +68,9 @@ jobs:
           docker run \
             --rm \
             --network=web \
-            --env DB_DSN="${{ secrets.DB_DSN }}" \
-            --env CREDS="${{ secrets.CREDS }}" \
-            --env PARENT_FOLDER_ID="${{ secrets.PARENT_FOLDER_ID }}" \
+            --env DB_DSN=${{ secrets.DB_DSN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }}_migration \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test \
             alembic upgrade head
@@ -83,9 +83,9 @@ jobs:
             --detach \
             --restart on-failure:3 \
             --network=web \
-            --env DB_DSN="${{ secrets.DB_DSN }}" \
-            --env CREDS="${{ secrets.CREDS }}" \
-            --env PARENT_FOLDER_ID="${{ secrets.PARENT_FOLDER_ID }}" \
+            --env DB_DSN=${{ secrets.DB_DSN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:test
 
@@ -111,9 +111,9 @@ jobs:
           docker run \
             --rm \
             --network=web \
-            --env DB_DSN="${{ secrets.DB_DSN }}" \
-            --env CREDS="${{ secrets.CREDS }}" \
-            --env PARENT_FOLDER_ID="${{ secrets.PARENT_FOLDER_ID }}" \
+            --env DB_DSN=${{ secrets.DB_DSN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }}_migration \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
             alembic upgrade head
@@ -126,8 +126,8 @@ jobs:
             --detach \
             --restart always \
             --network=web \
-            --env DB_DSN="${{ secrets.DB_DSN }}" \
-            --env CREDS="${{ secrets.CREDS }}" \
-            --env PARENT_FOLDER_ID="${{ secrets.PARENT_FOLDER_ID }}" \
+            --env DB_DSN=${{ secrets.DB_DSN }} \
+            --env CREDS=${{ secrets.CREDS }} \
+            --env PARENT_FOLDER_ID=${{ secrets.PARENT_FOLDER_ID }} \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
