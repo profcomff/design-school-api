@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Iterator
+
 from sqlalchemy.ext.hybrid import hybrid_property
 
 from .base import Base
@@ -52,15 +54,15 @@ class Direction(Base):
 
 class User(Base):
     id = Column(Integer, primary_key=True)
-    union_id = Column(String, nullable=False)
+    union_id = Column(String, nullable=True)
     direction_id = Column(Integer, ForeignKey("direction.id"))
-    first_name = Column(String, nullable=False)
-    middle_name = Column(String, nullable=False)
-    last_name = Column(String, nullable=False)
-    year = Column(DbEnum(Year, native_enum=False), nullable=False)
+    first_name = Column(String, nullable=True)
+    middle_name = Column(String, nullable=True)
+    last_name = Column(String, nullable=True)
+    year = Column(DbEnum(Year, native_enum=False), nullable=True)
     readme = Column(Text, nullable=True)
     social_web_id = Column(String, nullable=False)
-    folder_id = Column(String, nullable=False)
+    folder_id = Column(String, nullable=True)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")
     responses: list[Response] = relationship("Response", foreign_keys="Response.user_id", back_populates="user",
@@ -76,7 +78,7 @@ class User(Base):
         if last_response:
             return last_response.video.next_video
         return videos[0] if (videos := self.direction.videos) else None
-    
+
 
 class Video(Base):
     id = Column(Integer, primary_key=True)

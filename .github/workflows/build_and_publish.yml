@@ -52,7 +52,7 @@ jobs:
     runs-on: [self-hosted, Linux]
     environment:
       name: Testing
-      url: https://design.bot.test.profcomff.com/
+      url: https://api.test.design.school.profcomff.com/
     env:
       CONTAITER_NAME: com_profcomff_api_design_school_test
     permissions:
@@ -91,7 +91,7 @@ jobs:
     runs-on: [ self-hosted, Linux ]
     environment:
       name: Production
-      url: https://design.bot.profcomff.com/
+      url: https://api.design.school.profcomff.com/
     env:
       CONTAITER_NAME: com_profcomff_api_design_school
     permissions:

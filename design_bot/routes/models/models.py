@@ -3,8 +3,7 @@ from design_bot.models.db import Year, RequestTypes, Directions
 from pydantic import HttpUrl
 
 
-
-class UserPost(Base):
+class User(Base):
     union_id: str
     direction_id: int
     first_name: str
@@ -13,9 +12,28 @@ class UserPost(Base):
     year: Year
     readme: str
     social_web_id: str
+    folder_id: str | None = None
 
 
-class UserGet(UserPost):
+class UserGetWithFolder(User):
+    folder_id: str
+
+
+class UserPost(Base):
+    social_web_id: str
+
+
+class UserPatch(Base):
+    union_id: str | None
+    direction_id: int | None
+    first_name: str | None
+    middle_name: str | None
+    last_name: str | None
+    year: Year | None
+    readme: str | None
+
+
+class UserGet(User):
     id: int
 
 
