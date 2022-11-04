@@ -8,3 +8,4 @@ SQLAlchemy
 gunicorn
 pydrive2
 python-multipart
+aiofiles
