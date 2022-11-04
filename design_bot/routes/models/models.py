@@ -33,8 +33,17 @@ class UserPatch(Base):
     readme: str | None
 
 
-class UserGet(User):
+class UserGet(Base):
     id: int
+    union_id: str | None = None
+    direction_id: int | None = None
+    first_name: str | None = None
+    middle_name: str | None = None
+    last_name: str | None = None
+    year: Year | None = None
+    readme: str | None = None
+    social_web_id: str
+    folder_id: str | None = None
 
 
 class SpamPost(Base):

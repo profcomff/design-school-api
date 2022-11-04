@@ -34,10 +34,12 @@ async def sign_up(new_user: UserPost) -> UserGet:
 
 
 @registration.post("/{social_web_id}", response_model=UserGetWithFolder)
-async def create_folder(social_web_id: int) -> UserGetWithFolder:
+async def create_folder(social_web_id: str) -> UserGetWithFolder:
     user: User = db.session.query(User).filter(User.social_web_id == social_web_id).one_or_none()
     if not user.first_name or not user.middle_name or not user.last_name or not user.direction_id or not user.readme or not user.union_id or not user.year:
         raise HTTPException(412, "User registration did not end")
+    if user.folder_id:
+        raise HTTPException(403, "Already exists")
     folder_id = await create_user_folder(**UserGet.from_orm(user).dict())
     user.folder_id = folder_id
     db.session.flush()
