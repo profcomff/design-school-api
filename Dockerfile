@@ -8,4 +8,4 @@ ADD gunicorn_conf.py alembic.ini /app/
 ADD migrations /app/migrations
 ADD design_bot /app/design_bot
 
-CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "/app/gunicorn_conf.py", "design_bot.routes.base:app" ]
+CMD [ "gunicorn", "-k", "uvicorn.workers.UvicornWorker", "-c", "/app/gunicorn_conf.py" ,"design_bot.routes.base:app" ]

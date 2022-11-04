@@ -1,10 +1,15 @@
-from pydantic import BaseSettings, PostgresDsn
+from typing import Any
+
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath, FilePath, Json
 from functools import lru_cache
 
 
 class Settings(BaseSettings):
     """Application settings"""
     DB_DSN: PostgresDsn
+    PARENT_FOLDER_ID: str
+    FILE_PATH: DirectoryPath = "static"
+    CREDS: str
 
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
