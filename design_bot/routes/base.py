@@ -5,6 +5,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 from starlette.types import ASGIApp
 
+from .auth import auth_router
 from ..settings import Settings
 from fastapi_sqlalchemy import DBSessionMiddleware
 
@@ -42,6 +43,7 @@ app.add_middleware(
 app.add_middleware(LimitUploadSize, max_upload_size=3145728)
 
 
+app.include_router(auth_router)
 app.include_router(directions)
 app.include_router(videos)
 app.include_router(registration)

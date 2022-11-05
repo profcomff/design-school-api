@@ -21,7 +21,7 @@ gauth.credentials=ServiceAccountCredentials.from_json_keyfile_dict(json.loads(se
 drive = GoogleDrive(gauth)
 
 
-async def create_user_folder(*, first_name: str, middle_name: str, last_name: str, social_web_id: int, **kwargs) -> str:
+async def create_user_folder(*, first_name: str, middle_name: str, last_name: str, social_web_id: str, **kwargs) -> str:
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     newFolder = drive.CreateFile({'title': f"{first_name}_{middle_name}_{last_name}_{social_web_id}_{random_string}",
                                   "parents": [{"kind": "drive#fileLink", "id": \

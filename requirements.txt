@@ -9,3 +9,4 @@ gunicorn
 pydrive2
 python-multipart
 aiofiles
+aioredis

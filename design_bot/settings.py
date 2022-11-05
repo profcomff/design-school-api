@@ -1,6 +1,6 @@
 from typing import Any
 
-from pydantic import BaseSettings, PostgresDsn, DirectoryPath, FilePath, Json
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath, FilePath, Json, RedisDsn
 from functools import lru_cache
 
 
@@ -10,7 +10,8 @@ class Settings(BaseSettings):
     PARENT_FOLDER_ID: str
     FILE_PATH: DirectoryPath = "static"
     CREDS: str
-
+    REDIS_DSN: RedisDsn
+    ADMIN_SECRET: dict[str, str] = {"admin": "42"}
     CORS_ALLOW_ORIGINS: list[str] = ['*']
     CORS_ALLOW_CREDENTIALS: bool = True
     CORS_ALLOW_METHODS: list[str] = ['*']
