@@ -8,7 +8,6 @@ from design_bot.methods import auth
 
 auth_router = APIRouter(prefix="", tags=["Utils: Auth"])
 settings = get_settings()
-logger = logging.getLogger(__name__)
 
 
 @auth_router.post("/token")
