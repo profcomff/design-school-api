@@ -2,14 +2,11 @@ from http.client import HTTPException
 
 from fastapi import APIRouter
 from fastapi_sqlalchemy import db
-from pydantic import parse_obj_as
 from starlette.responses import PlainTextResponse
 
 from design_bot.exceptions import ObjectNotFound
-from design_bot.models.db import User, Video, Direction, Response, RequestTypes
-from .models.models import VideoPost, VideoGet, ResponsePost, ResponseGet
-
-
+from design_bot.models.db import User, Response
+from .models.models import VideoGet, ResponsePost, ResponseGet
 
 user_video = APIRouter(prefix="/uservideo", tags=["User Video"])
 

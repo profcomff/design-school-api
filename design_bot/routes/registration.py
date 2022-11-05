@@ -1,19 +1,17 @@
 from typing import Union
 
+import aioredis
 import sqlalchemy.exc
-import starlette.status
 from fastapi import APIRouter, Depends
-from pydantic import parse_obj_as
+from fastapi_sqlalchemy import db
 from sqlalchemy import update
-from fastapi.responses import ORJSONResponse
 from starlette.exceptions import HTTPException
 from starlette.responses import PlainTextResponse
-from .models.models import CreateUser, SpamPost, UserGet, SpamGet, UserPatch
-from fastapi_sqlalchemy import db
-from design_bot.models.db import User, SpamBeforeRegistration
+
 from design_bot.methods.google_drive import create_user_folder
-import aioredis
+from design_bot.models.db import User
 from design_bot.settings import get_settings
+from .models.models import CreateUser, UserGet, UserPatch
 from ..methods import auth
 
 registration = APIRouter(prefix="/sign-up", tags=["Registration"])

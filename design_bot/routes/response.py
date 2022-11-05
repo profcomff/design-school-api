@@ -16,7 +16,7 @@ from ..methods import auth
 
 settings = get_settings()
 
-response = APIRouter(prefix="/{video_id}/response/{user_id}", tags=["Response"])
+response = APIRouter(prefix="/video/{video_id}/response/{user_id}", tags=["Response"])
 
 
 @response.post("/file", response_model=ResponseGet)
