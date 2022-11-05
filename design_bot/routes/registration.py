@@ -33,4 +33,6 @@ async def patch_user(social_web_id: str, schema: UserPatch,  _: auth.User = Depe
 @registration.get("/{social_web_id}", response_model=UserGet)
 async def get_user(social_web_id: str, _: auth.User = Depends(auth.get_current_user)) -> UserGet:
     user: User = db.session.query(User).filter(User.social_web_id == social_web_id).one_or_none()
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
     return UserGet.from_orm(user)
