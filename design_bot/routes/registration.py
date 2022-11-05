@@ -2,7 +2,7 @@ import starlette.status
 from fastapi import APIRouter, Depends
 from fastapi_sqlalchemy import db
 from sqlalchemy import update
-from starlette.exceptions import HTTPException
+from fastapi import HTTPException
 
 from design_bot.models.db import User, Direction
 from .models.models import UserPost, UserGet, UserPatch
