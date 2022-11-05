@@ -7,7 +7,7 @@ from sqlalchemy import update
 from fastapi.responses import ORJSONResponse
 from starlette.exceptions import HTTPException
 from starlette.responses import PlainTextResponse
-from .models.models import CreateUser, SpamPost, UserGet, SpamGet, UserPatch, RedisModel
+from .models.models import CreateUser, SpamPost, UserGet, SpamGet, UserPatch
 from fastapi_sqlalchemy import db
 from design_bot.models.db import User, SpamBeforeRegistration
 from design_bot.methods.google_drive import create_user_folder
@@ -28,22 +28,22 @@ async def create_user(schema: CreateUser, _: auth.User = Depends(auth.get_curren
     return PlainTextResponse(status_code=201, content="User created")
 
 
-@registration.patch("/{social_web_id}", response_model=Union[UserGet, RedisModel])
-async def add_field(social_web_id: str, schema: UserPatch, _: auth.User = Depends(auth.get_current_user)) -> UserGet | RedisModel:
+@registration.patch("/{social_web_id}", response_model=Union[UserGet, str])
+async def add_field(social_web_id: str, schema: UserPatch, _: auth.User = Depends(auth.get_current_user)) -> UserGet | PlainTextResponse:
     redis_db = aioredis.from_url(settings.REDIS_DSN)
     user: dict[str, int | str] = await redis_db.hgetall(name=social_web_id)
     if not user:
         raise HTTPException(404, "User not found")
-    for k, v in schema.dict():
+    for k, v in schema.dict().items():
         if not v:
             continue
         await redis_db.hset(name=social_web_id, key=k, value=v)
     updated: dict[str, int | str] = await redis_db.hgetall(social_web_id)
     if updated.keys() == schema.dict().keys():
         folder_id = await create_user_folder(**updated, social_web_id=social_web_id)
-        db.session.add(db_user := User(**updated, social_web_id=social_web_id, folder_id=folder_id))
+        db.session.add(db_user := User(**updated, folder_id=folder_id))
         return UserGet.from_orm(db_user)
-    return RedisModel(social_web_id=social_web_id, user=user)
+    return PlainTextResponse(status_code=200, content="Fields updated")
 
 
 @registration.patch("/{social_web_id}", response_model=str)

@@ -17,11 +17,6 @@ class UserPatch(Base):
     readme: str | None
 
 
-class RedisModel(Base):
-    social_web_id: str
-    user: UserPatch
-
-
 class UserGet(Base):
     id: int
     union_id: str
