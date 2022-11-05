@@ -61,7 +61,7 @@ class User(Base):
     last_name = Column(String, nullable=True)
     year = Column(DbEnum(Year, native_enum=False), nullable=True)
     readme = Column(Text, nullable=True)
-    social_web_id = Column(String, nullable=False)
+    social_web_id = Column(String, nullable=False, unique=True)
     folder_id = Column(String, nullable=True)
 
     direction: Direction = relationship("Direction", foreign_keys=[direction_id], back_populates="users")

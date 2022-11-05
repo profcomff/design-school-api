@@ -56,23 +56,26 @@ async def add_field(social_web_id: str, schema: UserPatch,
         try:
             db.session.add(db_user := User(**updated, folder_id=folder_id))
             db.session.flush()
-        except sqlalchemy.exc.InvalidRequestError:
+        except sqlalchemy.exc.IntegrityError:
             return PlainTextResponse(status_code=422, content="Invalid user data")
+        await redis_db.delete(social_web_id)
         return UserGet.from_orm(db_user)
     return PlainTextResponse(status_code=200, content="Fields updated")
 
 
-@registration.patch("/{social_web_id}", response_model=str)
+@registration.patch("/{social_web_id}", response_model=UserGet)
 async def patch_user(social_web_id: str, schema: UserPatch,
-                     _: auth.User = Depends(auth.get_current_user)) -> PlainTextResponse:
+                     _: auth.User = Depends(auth.get_current_user)) -> UserGet:
+    if not db.session.query(User).filter(User.social_web_id == social_web_id).one_or_none():
+        raise HTTPException(status_code=404, detail="Not found")
     user: User = db.session.execute(
         update(User).where(User.social_web_id == social_web_id).values(**schema.dict(exclude_unset=True)))
-    return PlainTextResponse(status_code=200, content="Patched")
+    return UserGet.from_orm(user)
 
 
 @registration.get("/{social_web_id}", response_model=UserGet)
 async def get_user(social_web_id: str, _: auth.User = Depends(auth.get_current_user)) -> UserGet:
     user: User = db.session.query(User).filter(User.social_web_id == social_web_id).one_or_none()
-    if not user.first_name or not user.middle_name or not user.last_name or not user.direction_id or not user.readme or not user.union_id or not user.year:
-        raise HTTPException(412, "User registration did not end")
+    if not user:
+        raise HTTPException(status_code=404, detail="Not found")
     return UserGet.from_orm(user)
