@@ -4,7 +4,7 @@ import string
 from http.client import HTTPException
 
 import aiofiles
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Depends
 from fastapi_sqlalchemy import db
 
 from design_bot.exceptions import ObjectNotFound
@@ -12,14 +12,15 @@ from design_bot.methods.google_drive import upload_file_to_drive, upload_text_to
 from design_bot.models.db import User, Response
 from design_bot.settings import get_settings
 from .models.models import ResponsePost, ResponseGet
+from ..methods import auth
 
 settings = get_settings()
 
-response = APIRouter(prefix="/{video_id}/response/{user_id}", tags=["Response"])
+response = APIRouter(prefix="/video/{video_id}/response/{user_id}", tags=["Response"])
 
 
 @response.post("/file", response_model=ResponseGet)
-async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...)) -> ResponseGet:
+async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...),_: auth.User = Depends(auth.get_current_user)) -> ResponseGet:
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)
@@ -46,7 +47,7 @@ async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...))
 
 
 @response.post("/video", response_model=ResponseGet)
-async def upload_link(user_id: int, video_id: int, response_inp: ResponsePost) -> ResponseGet:
+async def upload_link(user_id: int, video_id: int, response_inp: ResponsePost, _: auth.User = Depends(auth.get_current_user)) -> ResponseGet:
     if "drive.google.com" not in response_inp.content:
         raise HTTPException(422, "Invalid content, only GDrive is correct")
     user: User = db.session.query(User).get(user_id)
@@ -69,7 +70,7 @@ async def upload_link(user_id: int, video_id: int, response_inp: ResponsePost) -
 
 
 @response.post("/text", response_model=ResponseGet)
-async def upload_text(user_id: int, video_id: int, response_inp: ResponsePost) -> ResponseGet:
+async def upload_text(user_id: int, video_id: int, response_inp: ResponsePost, _: auth.User = Depends(auth.get_current_user)) -> ResponseGet:
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)

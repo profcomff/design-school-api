@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi_sqlalchemy import db
 from pydantic import parse_obj_as
 from starlette.responses import PlainTextResponse
@@ -6,12 +6,13 @@ from starlette.responses import PlainTextResponse
 from design_bot.exceptions import ObjectNotFound
 from design_bot.models.db import User, Video, Direction
 from .models.models import VideoPost, VideoGet
+from ..methods import auth
 
 videos = APIRouter(prefix="/video", tags=["Video"])
 
 
 @videos.post("/", response_model=VideoGet)
-async def add_video(video_inp: VideoPost) -> VideoPost:
+async def add_video(video_inp: VideoPost, _: auth.User = Depends(auth.get_current_user)) -> VideoPost:
     direction: Direction = db.session.query(Direction).get(video_inp.direction_id)
     if not direction:
         raise ObjectNotFound(Direction, video_inp.direction_id)
@@ -38,7 +39,7 @@ async def get_video(id: int) -> VideoGet:
 
 
 @videos.delete("/{id}", response_model=None)
-async def delete_video(id: int) -> None:
+async def delete_video(id: int, _: auth.User = Depends(auth.get_current_user)) -> None:
     video: Video = db.session.query(Video).get(id)
     if not video:
         raise ObjectNotFound(Video, id)

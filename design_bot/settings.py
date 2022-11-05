@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_DSN: PostgresDsn
     PARENT_FOLDER_ID: str
     FILE_PATH: DirectoryPath = "static"
+    ADMIN_SECRET: dict[str, str] = {"admin": "42"}
     CREDS: str
 
     CORS_ALLOW_ORIGINS: list[str] = ['*']
