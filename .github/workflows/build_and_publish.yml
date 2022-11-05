@@ -114,6 +114,7 @@ jobs:
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env CREDS='${{ secrets.CREDS }}' \
             --env PARENT_FOLDER_ID='${{ secrets.PARENT_FOLDER_ID }}' \
+            --env ADMIN_SECRET='${{ secrets.ADMIN_SECRET }}' \
             --name ${{ env.CONTAITER_NAME }}_migration \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest \
             alembic upgrade head
@@ -129,5 +130,6 @@ jobs:
             --env DB_DSN='${{ secrets.DB_DSN }}' \
             --env CREDS='${{ secrets.CREDS }}' \
             --env PARENT_FOLDER_ID='${{ secrets.PARENT_FOLDER_ID }}' \
+            --env ADMIN_SECRET='${{ secrets.ADMIN_SECRET }}' \
             --name ${{ env.CONTAITER_NAME }} \
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
