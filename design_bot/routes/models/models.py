@@ -49,7 +49,7 @@ class VideoPost(Base):
     link: HttpUrl
     request: str | None
     direction_id: int
-    request_type: RequestTypes
+    request_type: RequestTypes | None
 
 
 class VideoGet(VideoPost):

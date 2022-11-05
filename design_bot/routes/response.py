@@ -30,7 +30,7 @@ async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...),
     if next_video:
         if next_video.id != video_id:
             raise HTTPException(403, "Forbidden, this video completed/not allowed")
-        if next_video.request_type != RequestTypes.TEXT:
+        if next_video.request_type != RequestTypes.FILE:
             raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     ext = file.filename.split('.')[-1]
@@ -61,7 +61,7 @@ async def upload_link(user_id: int, video_id: int, response_inp: ResponsePost, _
     if next_video:
         if next_video.id != video_id:
             raise HTTPException(403, "Forbidden, this video completed/not allowed")
-        if next_video.request_type != RequestTypes.TEXT:
+        if next_video.request_type != RequestTypes.VIDEO:
             raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     link = await upload_text_to_drive(social_web_id=user.social_web_id,
                                       user_folder_id=user.folder_id,
@@ -91,5 +91,23 @@ async def upload_text(user_id: int, video_id: int, response_inp: ResponsePost, _
                                       user_folder_id=user.folder_id,
                                       lesson_number=next_video.id, content=response_inp.content)
     db.session.add(response := Response(user_id=user.id, video_id=video_id, content=link))
+    db.session.flush()
+    return ResponseGet.from_orm(response)
+
+
+@response.post("/none", response_model=ResponseGet)
+async def upload_none(user_id: int, video_id: int, _: auth.User = Depends(auth.get_current_user)) -> ResponseGet:
+    user: User = db.session.query(User).get(user_id)
+    if not user:
+        raise ObjectNotFound(User, user_id)
+    next_video = await user.next_user_video
+    if not next_video:
+        raise HTTPException(403, "Forbidden, Course ended")
+    if next_video:
+        if next_video.id != video_id:
+            raise HTTPException(403, "Forbidden, this video completed/not allowed")
+        if not next_video.request_type:
+            raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
+    db.session.add(response := Response(user_id=user.id, video_id=video_id, content=None))
     db.session.flush()
     return ResponseGet.from_orm(response)

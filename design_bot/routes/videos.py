@@ -25,11 +25,6 @@ async def add_video(video_inp: VideoPost, _: auth.User = Depends(auth.get_curren
     return VideoGet.from_orm(video)
 
 
-# @videos.patch("/", response_model=VideoGet)
-# async def patch_video(video_inp: ...) -> VideoGet:
-#     ...
-
-
 @videos.get("/{id}", response_model=VideoGet)
 async def get_video(id: int) -> VideoGet:
     video = db.session.query(Video).get(id)
