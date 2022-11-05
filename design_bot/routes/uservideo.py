@@ -3,7 +3,7 @@ from fastapi_sqlalchemy import db
 from starlette.responses import PlainTextResponse
 
 from design_bot.exceptions import ObjectNotFound
-from design_bot.models.db import User, Response
+from design_bot.models.db import User
 from .models.models import VideoGet
 from ..methods import auth
 

@@ -1,15 +1,15 @@
 import os.path
 import random
 import string
-from fastapi import HTTPException
 
 import aiofiles
 from fastapi import APIRouter, UploadFile, File, Depends
+from fastapi import HTTPException
 from fastapi_sqlalchemy import db
 
 from design_bot.exceptions import ObjectNotFound
 from design_bot.methods.google_drive import upload_file_to_drive, upload_text_to_drive
-from design_bot.models.db import User, Response, Video, RequestTypes
+from design_bot.models.db import User, Response, RequestTypes
 from design_bot.settings import get_settings
 from .models.models import ResponsePost, ResponseGet
 from ..methods import auth
