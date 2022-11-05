@@ -46,4 +46,3 @@ async def delete_video(id: int, _: auth.User = Depends(auth.get_current_user)) -
 @videos.get("/", response_model=list[VideoGet])
 async def get_all_videos() -> list[VideoGet]:
     return parse_obj_as(list[VideoGet], db.session.query(Video).all())
-

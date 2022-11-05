@@ -13,5 +13,3 @@ async def create_direction(direction_inp: DirectionPost, _: auth.User = Depends(
     db.session.add(direction := Direction(**direction_inp.dict()))
     db.session.flush()
     return DirectionGet.from_orm(direction)
-
-

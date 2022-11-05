@@ -6,6 +6,7 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     """Application settings"""
+
     DB_DSN: PostgresDsn
     PARENT_FOLDER_ID: str
     FILE_PATH: DirectoryPath = "static"

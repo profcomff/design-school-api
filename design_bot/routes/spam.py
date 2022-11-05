@@ -19,5 +19,5 @@ async def add_user_to_spam(spam_post: SpamPost) -> PlainTextResponse:
 
 
 @spam.get("/spam", response_model=list[SpamGet])
-async def get_spam_list( _: auth.User = Depends(auth.get_current_user)) -> list[SpamGet]:
+async def get_spam_list(_: auth.User = Depends(auth.get_current_user)) -> list[SpamGet]:
     return parse_obj_as(list[SpamGet], db.session.query(SpamBeforeRegistration).all())

@@ -13,7 +13,7 @@ registration = APIRouter(prefix="/user", tags=["Registration"])
 
 
 @registration.post("/", response_model=UserGet)
-async def sign_up(new_user: UserPost,  _: auth.User = Depends(auth.get_current_user)) -> UserGet:
+async def sign_up(new_user: UserPost, _: auth.User = Depends(auth.get_current_user)) -> UserGet:
     if db.session.query(User).filter(User.social_web_id == new_user.social_web_id).one_or_none():
         raise HTTPException(status_code=starlette.status.HTTP_409_CONFLICT, detail="Forbidden")
     if not db.session.query(Direction).get(new_user.direction_id):
@@ -25,8 +25,10 @@ async def sign_up(new_user: UserPost,  _: auth.User = Depends(auth.get_current_u
 
 
 @registration.patch("/{social_web_id}", response_model=UserGet)
-async def patch_user(social_web_id: str, schema: UserPatch,  _: auth.User = Depends(auth.get_current_user)) -> UserGet:
-    user: User = db.session.execute(update(User).where(User.social_web_id == social_web_id).values(**schema.dict(exclude_unset=True)))
+async def patch_user(social_web_id: str, schema: UserPatch, _: auth.User = Depends(auth.get_current_user)) -> UserGet:
+    user: User = db.session.execute(
+        update(User).where(User.social_web_id == social_web_id).values(**schema.dict(exclude_unset=True))
+    )
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return UserGet.from_orm(user)

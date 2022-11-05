@@ -71,4 +71,3 @@ class DirectionPost(Base):
 
 class DirectionGet(DirectionPost):
     id: int
-
