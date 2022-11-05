@@ -16,7 +16,4 @@ async def get_next_video(user_id: int, _: auth.User = Depends(auth.get_current_u
     if not user:
         raise ObjectNotFound(User, user_id)
     video = await user.next_user_video
-    if video.request_type == "":
-        db.session.add(Response(video_id=video.id, user_id=user.id))
-        db.session.flush()
     return VideoGet.from_orm(video) if video else PlainTextResponse(status_code=200, content="Course ended")

@@ -1,7 +1,7 @@
 import os.path
 import random
 import string
-from http.client import HTTPException
+from fastapi import HTTPException
 
 import aiofiles
 from fastapi import APIRouter, UploadFile, File, Depends
@@ -106,7 +106,7 @@ async def upload_none(user_id: int, video_id: int, _: auth.User = Depends(auth.g
     if next_video:
         if next_video.id != video_id:
             raise HTTPException(403, "Forbidden, this video completed/not allowed")
-        if not next_video.request_type:
+        if next_video.request_type:
             raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     db.session.add(response := Response(user_id=user.id, video_id=video_id, content=None))
     db.session.flush()
