@@ -21,7 +21,12 @@ settings = get_settings()
 
 
 def redis_model_completed(model: dict[str, int | str]) -> bool:
-    pass
+    for row in [*UserPatch().dict().keys(), 'social_web_id']:
+        if row not in model.keys():
+            return False
+    return True
+
+
 
 @registration.post("/", response_model=str)
 async def create_user(schema: CreateUser, _: auth.User = Depends(auth.get_current_user)) -> PlainTextResponse:
@@ -44,9 +49,10 @@ async def add_field(social_web_id: str, schema: UserPatch,
         if not v:
             continue
         await redis_db.hset(name=social_web_id, key=k, value=v)
-    updated: dict[str, int | str] = await redis_db.hgetall(social_web_id)
-    if updated.keys() | "" == schema.dict().keys() | "social_web_id":
-        folder_id = await create_user_folder(**updated, social_web_id=social_web_id)
+    updated: dict[bytes, int | bytes] = await redis_db.hgetall(social_web_id)
+    updated: dict[str, int | str] = {row.decode('utf-8'): updated[row].decode('utf-8') for row in updated.keys()}
+    if redis_model_completed(updated):
+        folder_id = await create_user_folder(**updated)
         try:
             db.session.add(db_user := User(**updated, folder_id=folder_id))
             db.session.flush()
