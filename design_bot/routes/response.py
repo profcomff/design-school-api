@@ -9,7 +9,7 @@ from fastapi_sqlalchemy import db
 
 from design_bot.exceptions import ObjectNotFound
 from design_bot.methods.google_drive import upload_file_to_drive, upload_text_to_drive
-from design_bot.models.db import User, Response
+from design_bot.models.db import User, Response, Video, RequestTypes
 from design_bot.settings import get_settings
 from .models.models import ResponsePost, ResponseGet
 from ..methods import auth
@@ -29,7 +29,9 @@ async def upload_file(user_id: int, video_id: int, file: UploadFile = File(...),
         raise HTTPException(403, "Forbidden, Course ended")
     if next_video:
         if next_video.id != video_id:
-            raise HTTPException(403, "Forbidden")
+            raise HTTPException(403, "Forbidden, this video completed/not allowed")
+        if next_video.request_type != RequestTypes.TEXT:
+            raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
     ext = file.filename.split('.')[-1]
     path = os.path.join(settings.FILE_PATH,
@@ -58,7 +60,9 @@ async def upload_link(user_id: int, video_id: int, response_inp: ResponsePost, _
         raise HTTPException(403, "Forbidden, Course ended")
     if next_video:
         if next_video.id != video_id:
-            raise HTTPException(403, "Forbidden")
+            raise HTTPException(403, "Forbidden, this video completed/not allowed")
+        if next_video.request_type != RequestTypes.TEXT:
+            raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     link = await upload_text_to_drive(social_web_id=user.social_web_id,
                                       user_folder_id=user.folder_id,
                                       lesson_number=next_video.id, first_name=user.first_name,
@@ -79,7 +83,9 @@ async def upload_text(user_id: int, video_id: int, response_inp: ResponsePost, _
         raise HTTPException(403, "Forbidden, Course ended")
     if next_video:
         if next_video.id != video_id:
-            raise HTTPException(403, "Forbidden")
+            raise HTTPException(403, "Forbidden, this video completed/not allowed")
+        if next_video.request_type != RequestTypes.TEXT:
+            raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     link = await upload_text_to_drive(first_name=user.first_name, middle_name=user.middle_name,
                                       last_name=user.last_name, social_web_id=user.social_web_id,
                                       user_folder_id=user.folder_id,
