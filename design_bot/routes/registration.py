@@ -1,3 +1,6 @@
+import random
+import string
+
 import starlette.status
 from fastapi import APIRouter, Depends
 from fastapi_sqlalchemy import db
@@ -7,7 +10,7 @@ from fastapi import HTTPException
 from design_bot.models.db import User, Direction
 from .models.models import UserPost, UserGet, UserPatch
 from ..methods import auth
-from ..methods.google_drive import create_user_folder
+from ..methods.google_drive import create_user_folder, drive
 
 registration = APIRouter(prefix="/user", tags=["Registration"])
 
@@ -19,6 +22,16 @@ async def sign_up(new_user: UserPost, _: auth.User = Depends(auth.get_current_us
     if not db.session.query(Direction).get(new_user.direction_id):
         raise HTTPException(status_code=404, detail="Dirrection doesnt exists")
     folder_id = await create_user_folder(**new_user.dict())
+    if len(new_user.readme):
+        random_string = ''.join(random.choice(string.ascii_letters) for _ in range(12))
+        file = drive.CreateFile(
+            {
+                'title': f'{new_user.first_name}_{new_user.middle_name}_{new_user.last_name}_{new_user.social_web_id}_README_{random_string}.txt',
+                "parents": [{"id": folder_id}],
+            }
+        )
+        file.SetContentString(new_user.readme)
+        file.Upload()
     db.session.add(user := User(**new_user.dict(), folder_id=folder_id))
     db.session.flush()
     return UserGet.from_orm(user)
