@@ -13,6 +13,7 @@ from .registration import registration
 from .directions import directions
 from .auth import auth_router
 from .uservideo import user_video
+from .spam import spam
 from .response import response
 
 settings = Settings()
@@ -46,6 +47,7 @@ app.add_middleware(LimitUploadSize, max_upload_size=3145728)
 app.include_router(directions)
 app.include_router(auth_router)
 app.include_router(videos)
+app.include_router(spam)
 app.include_router(registration)
 app.include_router(user_video)
 app.include_router(response)

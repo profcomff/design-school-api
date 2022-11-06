@@ -8,7 +8,7 @@ from design_bot.models.db import SpamBeforeRegistration
 from .models.models import SpamPost, SpamGet
 from ..methods import auth
 
-spam = APIRouter(prefix="/sign-up", tags=["Registration"])
+spam = APIRouter(prefix="/sign-up", tags=["Spam"])
 
 
 @spam.post("/spam", response_model=None)
