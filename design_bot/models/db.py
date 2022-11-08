@@ -18,6 +18,8 @@ class Year(str, Enum):
     FOURTH = "4"
     FIFTH = "1м"
     SIXTH = "2м"
+    FIFTH_SPEC = "5"
+    SIXTH_SPEC = "6"
 
 
 class Directions(str, Enum):
