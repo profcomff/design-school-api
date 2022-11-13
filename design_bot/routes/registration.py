@@ -58,4 +58,7 @@ async def get_user(social_web_id: str, _: auth.User = Depends(auth.get_current_u
 
 @registration.get("/", response_model=list[UserGet])
 async def get_users(_: auth.User = Depends(auth.get_current_user)) -> list[UserGet]:
+    users = db.session.query(User).all()
+    if not users:
+        raise HTTPException(status_code=404)
     return parse_obj_as(list[UserGet], db.session.query(User).all())
