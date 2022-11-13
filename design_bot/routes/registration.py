@@ -4,6 +4,7 @@ import string
 import starlette.status
 from fastapi import APIRouter, Depends
 from fastapi_sqlalchemy import db
+from pydantic import parse_obj_as
 from sqlalchemy import update
 from fastapi import HTTPException
 
@@ -53,3 +54,8 @@ async def get_user(social_web_id: str, _: auth.User = Depends(auth.get_current_u
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return UserGet.from_orm(user)
+
+
+@registration.get("/", response_model=list[UserGet])
+async def get_users(_: auth.User = Depends(auth.get_current_user)) -> list[UserGet]:
+    return parse_obj_as(list[UserGet], db.session.query(User).all())
