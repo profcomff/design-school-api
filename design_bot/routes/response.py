@@ -136,7 +136,7 @@ async def upload_none(user_id: int, video_id: int, _: auth.User = Depends(auth.g
 
 
 @response.delete("/{id}", response_model=None)
-async def delete_resopnse(id: int, _: auth.User = Depends(auth.get_current_user)):
+async def delete_response(id: int, _: auth.User = Depends(auth.get_current_user)):
     res := Response = db.session.query(Response).get(id)
     if not res:
         raise ObjectNotFound(Response, id)
