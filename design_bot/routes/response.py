@@ -101,7 +101,7 @@ async def upload_text(
     if next_video:
         if next_video.id != video_id:
             raise HTTPException(403, "Forbidden, this video completed/not allowed")
-        if next_video.request_type != RequestTypes.TEXT and next_video.request_type != RequestTypes.VIDEO:
+        if next_video.request_type != RequestTypes.TEXT and next_video.request_type != RequestTypes.FILE:
             raise HTTPException(403, f"Forbidden, invalid video request type use {next_video.request_type} handler")
     link = await upload_text_to_drive(
         first_name=user.first_name,
