@@ -39,6 +39,7 @@ app.add_middleware(
     DBSessionMiddleware,
     db_url=settings.DB_DSN,
     session_args={"autocommit": True},
+    engine_args={"pool_pre_ping": True}
 )
 
 app.add_middleware(LimitUploadSize, max_upload_size=3145728)
