@@ -1,7 +1,6 @@
-from typing import Any
-
-from pydantic import BaseSettings, PostgresDsn, DirectoryPath, FilePath, Json
 from functools import lru_cache
+
+from pydantic import BaseSettings, PostgresDsn, DirectoryPath
 
 
 class Settings(BaseSettings):
