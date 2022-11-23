@@ -43,7 +43,7 @@ async def patch_user(social_web_id: str, schema: UserPatch, _: auth.User = Depen
     user_query = db.session.query(User.social_web_id == social_web_id)
     if not user_query.one_or_none():
         raise HTTPException(status_code=404, detail="User not found")
-    user_query.update(**schema.dict())
+    user_query.update(**schema.dict(exclude_unset=True))
     db.session.flush()
     return UserGet.from_orm(user_query.one())
 
