@@ -41,7 +41,7 @@ async def sign_up(new_user: UserPost, _: auth.User = Depends(auth.get_current_us
 @registration.patch("/{social_web_id}", response_model=UserGet)
 async def patch_user(social_web_id: str, schema: UserPatch, _: auth.User = Depends(auth.get_current_user)) -> UserGet:
     user_query = db.session.query(User.social_web_id == social_web_id)
-    if not user_query.one_or_none():
+    if not user_query.all():
         raise HTTPException(status_code=404, detail="User not found")
     user_query.update(**schema.dict(exclude_unset=True))
     db.session.flush()
@@ -62,13 +62,3 @@ async def get_users(_: auth.User = Depends(auth.get_current_user)) -> list[UserG
     if not users:
         raise HTTPException(status_code=404)
     return parse_obj_as(list[UserGet], db.session.query(User).all())
-
-
-@registration.delete('/{social_web_id}', response_model=None)
-async def delete_user(social_web_id: str, _: auth.User = Depends(auth.get_current_user)) -> None:
-    user: User = db.session.query(User).filter(User.social_web_id == social_web_id).one_or_none()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    db.session.delete(user)
-    db.session.flush()
-    return None
