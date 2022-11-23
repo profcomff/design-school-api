@@ -92,6 +92,7 @@ async def upload_link(
 async def upload_text(
     user_id: int, video_id: int, response_inp: ResponsePost, _: auth.User = Depends(auth.get_current_user)
 ) -> ResponseGet:
+
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)
