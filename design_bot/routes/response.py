@@ -61,8 +61,8 @@ async def upload_file(
 async def upload_link(
     user_id: int, video_id: int, response_inp: ResponsePost, _: auth.User = Depends(auth.get_current_user)
 ) -> ResponseGet:
-    if "drive.google.com" not in response_inp.content:
-        raise HTTPException(422, "Invalid content, only GDrive is correct")
+    if "drive.google.com" not in response_inp.content and "docs.google.com" not in response_inp.content:
+        raise HTTPException(422, "Invalid content, only GDrive/GDocs is correct")
     user: User = db.session.query(User).get(user_id)
     if not user:
         raise ObjectNotFound(User, user_id)
